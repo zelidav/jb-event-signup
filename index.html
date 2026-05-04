@@ -117,7 +117,22 @@
 
   /* TIER CARDS */
   .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
-  @media (max-width: 880px) { .tiers { grid-template-columns: 1fr; } }
+  @media (max-width: 880px) {
+    .tiers { grid-template-columns: 1fr; }
+    #howBlock > section > div { grid-template-columns: 1fr !important; }
+    #stepProjector > div:nth-of-type(2) { grid-template-columns: 1fr !important; }
+  }
+  #projCommission, #projResaleSliders input[type=range], #projConsignmentSliders input[type=range] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: var(--line-strong); border-radius: 2px; outline: none; padding: 0;
+  }
+  #projCommission::-webkit-slider-thumb, #projResaleSliders input::-webkit-slider-thumb, #projConsignmentSliders input::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+    background: var(--gold); border-radius: 50%; cursor: pointer; border: 2px solid var(--bg-2);
+  }
+  #projCommission::-moz-range-thumb, #projResaleSliders input::-moz-range-thumb, #projConsignmentSliders input::-moz-range-thumb {
+    width: 16px; height: 16px; background: var(--gold); border-radius: 50%; cursor: pointer; border: 2px solid var(--bg-2);
+  }
   .tier {
     background: var(--bg-2); border: 1px solid var(--line); border-radius: 6px;
     padding: 28px 24px; cursor: pointer; transition: all 0.2s;
@@ -415,15 +430,41 @@
 <header>
   <div class="header-inner">
     <div class="brand">JEROME BAKER <span>×</span> NY DROP 1 <span style="opacity:0.5">/</span> WHOLESALE</div>
-    <div class="step-indicator">
-      <span id="stepLabel">Step 1 of 4</span>
-      <span class="step-dot active" data-step="1"></span>
-      <span class="step-dot" data-step="2"></span>
-      <span class="step-dot" data-step="3"></span>
-      <span class="step-dot" data-step="4"></span>
+    <div style="display:flex;align-items:center;gap:18px">
+      <button type="button" id="projectorBtn" onclick="toggleProjector()" style="background:transparent;color:var(--gold);border:1px solid var(--line-strong);padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.14em;border-radius:4px;cursor:pointer">📊 Revenue Projector</button>
+      <div class="step-indicator" id="stepIndicator">
+        <span id="stepLabel">Step 1 of 4</span>
+        <span class="step-dot active" data-step="1"></span>
+        <span class="step-dot" data-step="2"></span>
+        <span class="step-dot" data-step="3"></span>
+        <span class="step-dot" data-step="4"></span>
+      </div>
     </div>
   </div>
 </header>
+
+<!-- HOW IT WORKS — QR + consignment explainer (visible above step 1) -->
+<div id="howBlock">
+  <section style="padding: 50px 24px 0; max-width: 1200px; margin: 0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <div style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:24px;border-top:3px solid var(--gold);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:var(--gold);margin-bottom:10px">01 / WHOLESALE</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;margin-bottom:10px">You buy. You stock. You keep 100%.</div>
+        <div style="font-size:13px;color:var(--ink-mute);line-height:1.55">Box Sets, Hats, Pre-Rolls, Flower jars, Clearboys, Papers. You pay 50% of MSRP upfront, sell at full MSRP, keep all proceeds. Standard wholesale.</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:24px;border-top:3px solid #6b87ff;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#6b87ff;margin-bottom:10px">02 / CONSIGNMENT</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;margin-bottom:10px">Display ships free. JBD owns it.</div>
+        <div style="font-size:13px;color:var(--ink-mute);line-height:1.55">Case build, art glass, steeze tubes, beakers, display jars — all installed in your store at zero upfront cost. <strong style="color:var(--ink)">JBD retains title</strong> and may retrieve any consignment piece on 5 business days' notice.</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:24px;border-top:3px solid var(--good);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:var(--good);margin-bottom:10px">03 / QR PAYMENT FLOW</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;margin-bottom:10px">Customers scan, JBD bills, you get paid.</div>
+        <div style="font-size:13px;color:var(--ink-mute);line-height:1.55">Each case carries a featured QR linking to your store's live in-stock list. Customers pay JBD by credit card; we ACH your commission within 15 days. Cash sales of consignment items? Same split — you remit JBD's share within 7 days.</div>
+      </div>
+    </div>
+  </section>
+</div>
 
 <!-- HERO (always visible above step 1) -->
 <div id="heroBlock">
@@ -460,7 +501,7 @@
       <table class="compare-table" id="compareTable"></table>
     </div>
     <div class="compare-note">
-      <strong>Consignment terms:</strong> all retail items priced at MSRP, retailer keeps a 50% margin (Wholesale = ½ MSRP). Display-only items (case, art glass, steeze tubes/beakers, display jars) have $0 wholesale cost — they ship with the kit and stay in-store as branded merchandising. The "Your Invoice" total is what your store pays JBD; the "Sell-Through MSRP" is what the same kit grosses at full MSRP retail.
+      <strong>Two-mode program.</strong> <strong style="color:var(--gold)">Wholesale items</strong> (Clearboys, Box Sets, Hats, Papers, Pre-Rolls, Flower) ship at 50% of MSRP — you pay upfront and keep 100% of MSRP at the till. <strong style="color:var(--gold)">Consignment items</strong> (case build, art glass, steeze, display jars) ship at $0 upfront — if a customer buys one, you keep <strong>20% of MSRP</strong> and remit 80% back to JBD. Display still doubles as branded merchandising — the consignment GP is upside, not the core economics.
     </div>
   </div>
 
@@ -590,6 +631,80 @@
   </div>
 </section>
 
+<!-- REVENUE PROJECTOR — David's pitch tool (toggleable from header) -->
+<section class="step" id="stepProjector">
+  <div class="step-head">
+    <h2>Revenue Projector</h2>
+    <p>Drag the sliders to model what a store could make monthly through this program — wholesale margin on resale items + JBD-paid commission on consignment sales. Built for live retailer conversations; nothing here is binding.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:380px 1fr;gap:24px;">
+    <!-- Left: inputs -->
+    <div style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:24px;">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);margin-bottom:18px">Inputs</h3>
+
+      <div style="margin-bottom:18px">
+        <label>Tier (loads default unit mix)</label>
+        <select id="projTierSel" onchange="loadProjTier()" style="margin-bottom:0">
+          <option value="tier1">Tier 1 — Flagship</option>
+          <option value="tier2">Tier 2 — Countertop</option>
+          <option value="tier3">Tier 3 — In-Case</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:18px">
+        <label>Negotiated Commission on Consignment Sales</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="range" id="projCommission" min="5" max="50" step="1" value="20" oninput="recalcProjector()" style="flex:1">
+          <span id="projCommissionVal" class="mono" style="color:var(--gold);font-size:18px;font-weight:600;min-width:60px;text-align:right">20%</span>
+        </div>
+        <div class="mono" style="font-size:10px;color:var(--ink-mute);margin-top:4px;letter-spacing:0.08em">Default 20%. Drag to model alternatives.</div>
+      </div>
+
+      <h4 style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);margin:24px 0 8px;letter-spacing:0.04em">RESALE — MONTHLY UNITS SOLD</h4>
+      <div id="projResaleSliders"></div>
+
+      <h4 style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);margin:24px 0 8px;letter-spacing:0.04em">CONSIGNMENT — MONTHLY UNITS SOLD</h4>
+      <div id="projConsignmentSliders"></div>
+    </div>
+
+    <!-- Right: outputs -->
+    <div>
+      <div class="kpi-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px">
+        <div class="kpi" style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:20px;border-left:3px solid var(--good)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">Retailer Monthly GP</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--good)" id="projRetailerMonthly">$0</div>
+          <div style="font-size:11px;color:var(--ink-mute);margin-top:6px;font-family:'JetBrains Mono',monospace" id="projRetailerSplit">resale 0 · consignment 0</div>
+        </div>
+        <div class="kpi" style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:20px;border-left:3px solid var(--gold)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">Annualized Retailer GP</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--gold)" id="projRetailerAnnual">$0</div>
+          <div style="font-size:11px;color:var(--ink-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">×12 months</div>
+        </div>
+        <div class="kpi" style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:20px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">Customer Spend (MSRP)</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1" id="projMsrp">$0</div>
+          <div style="font-size:11px;color:var(--ink-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">monthly through this program</div>
+        </div>
+        <div class="kpi" style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:20px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">JBD Monthly Take</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;color:var(--ink-mute)" id="projJbdMonthly">$0</div>
+          <div style="font-size:11px;color:var(--ink-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">consignment 80% remit only</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-2);border:1px solid var(--line);border-radius:6px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--line);font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold)">Monthly P&amp;L Breakdown</div>
+        <div style="padding:0" id="projBreakdown"></div>
+      </div>
+
+      <div style="margin-top:18px;padding:14px 18px;background:var(--bg-3);border:1px solid var(--line);border-radius:4px;font-size:12px;color:var(--ink-mute);line-height:1.6">
+        <strong style="color:var(--ink)">Note:</strong> Projections only — actual results depend on store traffic, attach rate, and price elasticity. Wholesale GP assumes you sell at full MSRP. Consignment GP applies only to sales of display items (case, art glass, steeze, jars) processed through the JBD QR system or reported as cash sales.
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONFIRMATION -->
 <section class="step" id="stepDone">
   <div class="confirm-card">
@@ -617,73 +732,87 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG — TIERS (sourced from JBNY Launch Order Full Drop spreadsheet)
 // ═══════════════════════════════════════════════════════════
-// Consignment program: retailer pays the wholesale "invoice" for sellable
-// SKUs only (Clearboys, Box Sets, Hats, Papers, Pre-Rolls, Flower). Display
-// case + Art Glass + Steeze tubes/beakers + Display Jars are FREE to the
-// retailer (JBD covers cost) and stay in-store as visual merchandising.
+// Two-mode program (per JBNY Launch Order spreadsheet):
+//   1) RESALE items — retailer pays ~50% wholesale upfront, keeps 100% MSRP at
+//      sale (= ~50% retailer margin). Clearboys, Box Sets, Hats, Papers,
+//      Pre-Rolls, Flower.
+//   2) CONSIGNMENT items — retailer pays $0 upfront, keeps 20% of MSRP at
+//      sale and remits 80% back to JBD. Includes the case build, art glass,
+//      steeze tubes/beakers, and display jars. These ship as branded display
+//      with a built-in upside if customers want to buy them.
 //
-// Numbers come straight from the spreadsheet, with 20% retailer GP margin
-// already built into MSRP vs Wholesale. All amounts in USD per store.
+// All numbers come straight from the spreadsheet.
 
-// Catalog of every line item available across tiers (single source of truth)
+// Commission rate is negotiable per retailer. URL: ?commission=22 → 22%.
+// Default 20% reflects the spreadsheet baseline; set blank by passing ?commission=tbd.
+const _urlParams = new URLSearchParams(location.search);
+const _rawCommission = _urlParams.get('commission');
+const COMMISSION_DEFAULT = 0.20;
+const COMMISSION_TBD = _rawCommission === 'tbd';
+let CONSIGNMENT_PCT = COMMISSION_TBD ? COMMISSION_DEFAULT
+                    : (_rawCommission != null && !isNaN(parseFloat(_rawCommission)))
+                      ? parseFloat(_rawCommission) / 100
+                      : COMMISSION_DEFAULT;
+
+// `mode` is 'consignment' or 'wholesale' — drives invoice + GP math
 const CATALOG = {
   DISPLAY: {
-    'display-case': { name: 'Custom Display Case', detail: 'Display, dome, branded vinyl', msrp: 0, wholesale: 0 },
-    'cube':         { name: '18" Countertop Cube',  detail: 'Compact countertop display', msrp: 0, wholesale: 0 },
+    'display-case': { name: 'Custom Display Case', detail: 'Display, dome, branded vinyl', msrp: 0,    wholesale: 0, mode: 'consignment' },
+    'cube':         { name: '18" Countertop Cube',  detail: 'Compact countertop display',  msrp: 0,    wholesale: 0, mode: 'consignment' },
   },
   ART_GLASS: {
-    'le':       { name: 'Limited Edition (Large Statement)', detail: '18" art glass, fully worked', msrp: 750, wholesale: 0 },
-    'original': { name: 'The Original (Medium)',             detail: '18" art glass, fully worked', msrp: 550, wholesale: 0 },
+    'le':       { name: 'Limited Edition (Large Statement)', detail: '18" art glass, fully worked', msrp: 750, wholesale: 0, mode: 'consignment' },
+    'original': { name: 'The Original (Medium)',             detail: '18" art glass, fully worked', msrp: 550, wholesale: 0, mode: 'consignment' },
   },
   EVERYDAY_GLASS: {
-    'tube':   { name: '50mm Straight Tube',  detail: 'Clear glass, branded',        msrp: 80, wholesale: 0 },
-    'beaker': { name: '50mm Beaker',         detail: 'Clear glass, branded',        msrp: 80, wholesale: 0 },
+    'tube':   { name: '50mm Straight Tube',  detail: 'Clear glass, branded', msrp: 80, wholesale: 0, mode: 'consignment' },
+    'beaker': { name: '50mm Beaker',         detail: 'Clear glass, branded', msrp: 80, wholesale: 0, mode: 'consignment' },
   },
   DISPLAY_JARS: {
-    'jar-l': { name: 'Display Jar — 75mm (3oz)', detail: 'w/ cork lid, large', msrp: 55, wholesale: 0 },
-    'jar-s': { name: 'Display Jar — 38mm (1oz)', detail: 'w/ cork lid, small', msrp: 40, wholesale: 0 },
+    'jar-l': { name: 'Display Jar — 75mm (3oz)', detail: 'w/ cork lid, large', msrp: 55, wholesale: 0, mode: 'consignment' },
+    'jar-s': { name: 'Display Jar — 38mm (1oz)', detail: 'w/ cork lid, small', msrp: 40, wholesale: 0, mode: 'consignment' },
   },
   CLEARBOYS: {
-    'clearboy': { name: 'JBD Branded Clearboy', detail: 'Fast-mover case filler · bundle w/ cannabis', msrp: 20, wholesale: 12.5 },
+    'clearboy': { name: 'JBD Branded Clearboy', detail: 'Fast-mover case filler · bundle w/ cannabis', msrp: 20, wholesale: 12.5, mode: 'wholesale' },
   },
   BOX_SETS: {
-    'box-s': { name: 'Box Set — Sativa', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125 },
-    'box-h': { name: 'Box Set — Hybrid', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125 },
-    'box-i': { name: 'Box Set — Indica', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125 },
+    'box-s': { name: 'Box Set — Sativa', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125, mode: 'wholesale' },
+    'box-h': { name: 'Box Set — Hybrid', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125, mode: 'wholesale' },
+    'box-i': { name: 'Box Set — Indica', detail: 'Custom glass + papers/matches + 7g flower · LE 250', msrp: 249, wholesale: 125, mode: 'wholesale' },
   },
   HATS: {
-    'hat-s': { name: 'Hat — Sativa', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25 },
-    'hat-h': { name: 'Hat — Hybrid', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25 },
-    'hat-i': { name: 'Hat — Indica', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25 },
+    'hat-s': { name: 'Hat — Sativa', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25, mode: 'wholesale' },
+    'hat-h': { name: 'Hat — Hybrid', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25, mode: 'wholesale' },
+    'hat-i': { name: 'Hat — Indica', detail: 'Custom hemp · LE 250', msrp: 50, wholesale: 25, mode: 'wholesale' },
   },
   PAPERS: {
-    'pap-s': { name: 'Rolling Papers + Matches — Sativa', detail: 'Pattern 1', msrp: 9, wholesale: 4 },
-    'pap-h': { name: 'Rolling Papers + Matches — Hybrid', detail: 'Pattern 2', msrp: 9, wholesale: 4 },
-    'pap-i': { name: 'Rolling Papers + Matches — Indica', detail: 'Pattern 3', msrp: 9, wholesale: 4 },
+    'pap-s': { name: 'Rolling Papers + Matches — Sativa', detail: 'Pattern 1', msrp: 9, wholesale: 4, mode: 'wholesale' },
+    'pap-h': { name: 'Rolling Papers + Matches — Hybrid', detail: 'Pattern 2', msrp: 9, wholesale: 4, mode: 'wholesale' },
+    'pap-i': { name: 'Rolling Papers + Matches — Indica', detail: 'Pattern 3', msrp: 9, wholesale: 4, mode: 'wholesale' },
   },
   PREROLLS: {
-    'pre-s': { name: '1g Pre-Roll — Sativa', detail: 'Premium flower', msrp: 18, wholesale: 9 },
-    'pre-h': { name: '1g Pre-Roll — Hybrid', detail: 'Premium flower', msrp: 18, wholesale: 9 },
-    'pre-i': { name: '1g Pre-Roll — Indica', detail: 'Premium flower', msrp: 18, wholesale: 9 },
+    'pre-s': { name: '1g Pre-Roll — Sativa', detail: 'Premium flower', msrp: 18, wholesale: 9, mode: 'wholesale' },
+    'pre-h': { name: '1g Pre-Roll — Hybrid', detail: 'Premium flower', msrp: 18, wholesale: 9, mode: 'wholesale' },
+    'pre-i': { name: '1g Pre-Roll — Indica', detail: 'Premium flower', msrp: 18, wholesale: 9, mode: 'wholesale' },
   },
   FLOWER: {
-    'flw-s': { name: '7g Flower — Sativa (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5 },
-    'flw-h': { name: '7g Flower — Hybrid (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5 },
-    'flw-i': { name: '7g Flower — Indica (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5 },
+    'flw-s': { name: '7g Flower — Sativa (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5, mode: 'wholesale' },
+    'flw-h': { name: '7g Flower — Hybrid (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5, mode: 'wholesale' },
+    'flw-i': { name: '7g Flower — Indica (¼ oz)', detail: 'Premium flower', msrp: 75, wholesale: 37.5, mode: 'wholesale' },
   },
 };
 
 const CATEGORY_LABELS = {
-  DISPLAY:        'Display',
-  ART_GLASS:      'Art Glass (Display Only)',
-  EVERYDAY_GLASS: 'Everyday Steeze (Display Only)',
-  DISPLAY_JARS:   'Display Jars (Display Only)',
-  CLEARBOYS:      'JBD Clearboys',
-  BOX_SETS:       'Limited-Edition Box Sets',
-  HATS:           'Custom Hemp Hats',
-  PAPERS:         'Rolling Papers + Matches',
-  PREROLLS:       '1g Pre-Rolls (Cannabis)',
-  FLOWER:         '7g Flower Jars (Cannabis)',
+  DISPLAY:        'Display Build (Consignment)',
+  ART_GLASS:      'Art Glass (Consignment)',
+  EVERYDAY_GLASS: 'Everyday Steeze (Consignment)',
+  DISPLAY_JARS:   'Display Jars (Consignment)',
+  CLEARBOYS:      'JBD Clearboys (Wholesale)',
+  BOX_SETS:       'Limited-Edition Box Sets (Wholesale)',
+  HATS:           'Custom Hemp Hats (Wholesale)',
+  PAPERS:         'Rolling Papers + Matches (Wholesale)',
+  PREROLLS:       '1g Pre-Rolls — Cannabis (Wholesale)',
+  FLOWER:         '7g Flower Jars — Cannabis (Wholesale)',
 };
 
 // Per-tier units. Anything not listed = 0.
@@ -737,25 +866,49 @@ const TIERS = [
   },
 ];
 
-// Compute per-tier totals from the catalog + unit counts
+// Compute per-tier totals from the catalog + unit counts.
+// Splits invoice + GP between consignment and wholesale modes per the program.
 function computeTierTotals(tier) {
-  let wholesale = 0, msrp = 0, freeMsrp = 0;
+  let wholesaleInvoice = 0;          // what retailer pays JBD upfront
+  let wholesaleMsrp = 0;             // resale items' MSRP value
+  let wholesaleGp = 0;               // resale items' retailer profit
+  let consignmentMsrp = 0;           // consignment items' MSRP value
+  let consignmentGp = 0;             // retailer's 20% if consignment items sell
+  let consignmentRemit = 0;          // 80% remitted to JBD if consignment items sell
   const breakdown = {};
   Object.entries(CATALOG).forEach(([cat, items]) => {
     Object.entries(items).forEach(([id, item]) => {
       const u = tier.units[id] || 0;
       if (!u) return;
-      const wh = item.wholesale * u;
-      const ms = item.msrp * u;
-      wholesale += wh;
-      msrp += ms;
-      if (item.wholesale === 0 && item.msrp > 0) freeMsrp += ms;
+      const lineMsrp = item.msrp * u;
+      const lineWholesale = item.wholesale * u;
+      if (item.mode === 'wholesale') {
+        wholesaleInvoice += lineWholesale;
+        wholesaleMsrp += lineMsrp;
+        wholesaleGp += (lineMsrp - lineWholesale);
+      } else { // consignment
+        consignmentMsrp += lineMsrp;
+        consignmentGp += lineMsrp * CONSIGNMENT_PCT;
+        consignmentRemit += lineMsrp * (1 - CONSIGNMENT_PCT);
+      }
       breakdown[cat] = breakdown[cat] || [];
-      breakdown[cat].push({ id, ...item, units: u, lineWholesale: wh, lineMsrp: ms });
+      breakdown[cat].push({ id, ...item, units: u, lineWholesale, lineMsrp });
     });
   });
-  const retailerGp = msrp - wholesale; // sell-through profit at full MSRP
-  return { wholesale, msrp, freeMsrp, retailerGp, breakdown };
+  const totalGp = wholesaleGp + consignmentGp;
+  const totalMsrp = wholesaleMsrp + consignmentMsrp;
+  return {
+    wholesale: wholesaleInvoice,         // retailer pays this
+    msrp: totalMsrp,                     // total MSRP across all items
+    wholesaleMsrp,                       // resale MSRP only
+    consignmentMsrp,                     // consignment MSRP only
+    wholesaleGp,                         // retailer GP from resale items
+    consignmentGp,                       // retailer GP from consignment (20%)
+    consignmentRemit,                    // owed to JBD if consignment sells (80%)
+    retailerGp: totalGp,                 // total potential retailer profit
+    freeMsrp: consignmentMsrp,           // legacy alias used in some places
+    breakdown,
+  };
 }
 
 // Tier price = wholesale invoice (consignment model). Deposit = 25% of that.
@@ -766,42 +919,57 @@ TIERS.forEach(t => {
   t.totals = tot;
 });
 
-// Allocation agreement text — review with legal before going live.
+// Allocation agreement — review with legal before going live.
 const AGREEMENT_TEMPLATE = `<h4>1. Program & Allocation Reservation</h4>
-<p>This is a 10-store flagship launch program for the JBD NY 2026 Drop 1. By submitting this form, the undersigned licensed New York dispensary ("<strong>Buyer</strong>") reserves the tier selected above. Reservation is binding upon Buyer and contingent on Jerome Baker Designs ("<strong>JBD</strong>") confirming inventory availability, Buyer's NY OCM license status, and Buyer being among the ten flagship stores selected.</p>
+<p>This is a 10-store flagship launch program for the JBD NY 2026 Drop 1. By submitting this form, the undersigned licensed New York dispensary ("<strong>Buyer</strong>") reserves the tier selected above. Reservation is binding upon Buyer and contingent on Jerome Baker Designs ("<strong>JBD</strong>") confirming inventory availability, Buyer's NY OCM license status, and Buyer's selection as one of the ten flagship stores.</p>
 
-<h4>2. What Buyer Pays For (the "Wholesale Invoice")</h4>
-<p>Buyer's invoice covers <strong>sellable retail SKUs only</strong> — JBD Branded Clearboys, Limited-Edition Box Sets, Custom Hats, Rolling Papers + Matches, 1g Pre-Rolls, and 7g Flower jars. Each SKU is invoiced at <strong>50% of MSRP</strong> (a 50% retailer gross margin at full sell-through). The invoice total stated on the Allocation Summary is fixed at signing.</p>
+<h4>2. Two Inventory Modes — Wholesale and Consignment</h4>
+<p>The allocation contains two distinct inventory categories with different ownership and economics:</p>
+<p><strong>(a) Wholesale Items.</strong> JBD Clearboys, Limited-Edition Box Sets, Custom Hats, Rolling Papers + Matches, 1g Pre-Rolls, and 7g Flower jars are sold to Buyer at 50% of MSRP. Title and risk transfer to Buyer at delivery. Buyer keeps 100% of resale proceeds.</p>
+<p><strong>(b) Consignment Items.</strong> The display case build, large and medium art glass, Everyday Steeze tubes and beakers, and display jars are placed at Buyer's premises on consignment. <strong>Title to consignment items remains with JBD at all times.</strong> They are not Buyer's property, are not Buyer's inventory for any tax or accounting purpose, and may not be sold, pledged, encumbered, transferred, or otherwise disposed of except through the JBD QR Payment System defined in Section 4.</p>
 
-<h4>3. What JBD Provides Free of Charge (Display Inventory)</h4>
-<p>The custom display case (or 18" countertop cube), large/medium <strong>Limited Edition and Original art glass pieces</strong>, Everyday Steeze tubes and beakers, and display jars with cork lids ship at <strong>$0 wholesale cost</strong> as branded display inventory. These items are not for sale by Buyer; they remain installed in the store as visual merchandising for the duration of the program. Buyer may resell display items only with JBD's prior written consent.</p>
+<h4>3. JBD Property Rights & Right of Retrieval</h4>
+<p>Consignment items remain the sole and exclusive property of JBD throughout the program and thereafter until removed by JBD or sold via the QR Payment System. <strong>JBD may retrieve, relocate, or reposition any consignment item at any time on five (5) business days' written notice</strong> to Buyer's contact on file, including (without limitation) to move pieces to another store, to a JBD event, to a marketing shoot, or back to JBD's facility. Buyer will provide reasonable cooperation, including after-hours access if requested. Buyer will not refuse pickup, hold consignment items hostage to any disputed amount, or claim a security or possessory interest of any kind in consignment items. JBD's right of retrieval survives any dispute over wholesale invoice balances or other commercial matters.</p>
 
-<h4>4. Deposit & Payment Terms</h4>
-<p>A non-refundable deposit equal to <strong>25% of the wholesale invoice</strong> is due within seven (7) business days of signature, payable by ACH or wire. The remaining 75% is due no later than fourteen (14) days before the scheduled ship date. Allocation is not finalized until deposit clears.</p>
+<h4>4. JBD QR Payment System — Required Channel for Consignment Sales</h4>
+<p>Each case install includes a featured <strong>JBD QR code</strong> that links customers to a real-time, store-specific catalog of in-stock consignment items. Customers complete payment for any consignment item by credit card directly through JBD's payment processor at full MSRP. JBD then reimburses Buyer Buyer's commission (twenty percent (20%) of MSRP for consignment items) by ACH within fifteen (15) days of the calendar week in which the sale occurred, accompanied by an itemized statement.</p>
+<p><strong>Buyer agrees that the QR Payment System is the required channel for all consignment item sales.</strong> Buyer will not (i) accept payment for a consignment item outside the JBD system, (ii) move a consignment item off-premises in connection with a sale, or (iii) display pricing on consignment items inconsistent with current MSRP without JBD consent.</p>
 
-<h4>5. Ship & Install Window</h4>
-<p>JBD will ship and install the allocation between <strong>August 1, 2026</strong> and <strong>August 15, 2026</strong>. JBD ops will coordinate the install date with Buyer's contact on file. Risk of loss for resale inventory passes to Buyer upon delivery; display inventory remains JBD property.</p>
+<h4>5. Cash & Off-System Sales — Settlement Obligation</h4>
+<p>If Buyer nonetheless accepts cash, ACH, in-store credit card, or any other off-JBD-system payment for a consignment item (each a "Cash Sale"), Buyer will (a) report the Cash Sale to JBD in writing within forty-eight (48) hours of the sale, identifying the item, sale price, and date, and (b) remit to JBD <strong>eighty percent (80%) of MSRP</strong> for that item within seven (7) calendar days, by ACH or wire. Buyer may retain the remaining 20% as Buyer's commission. <strong>Failure to report a Cash Sale within the 48-hour window constitutes a material breach</strong> and entitles JBD to: (i) immediate retrieval of all remaining consignment items; (ii) a late-reporting fee of $250 per unreported item; (iii) the unpaid 80% balance plus interest at 1.5% per month; and (iv) termination of Buyer's participation in the program without refund.</p>
 
-<h4>6. Returns, Damage & Substitution</h4>
-<p>Buyer will inspect all items within seventy-two (72) hours of delivery and notify JBD in writing of damage, defect, or shortage. JBD will replace or credit any damaged or defective resale items at its option. Display goods and custom-fabricated case installs are not returnable absent manufacturing defect. JBD reserves the right to substitute SKUs of comparable value if a specific item is unavailable.</p>
+<h4>6. Inventory Inspection & Reconciliation</h4>
+<p>JBD or its designated representative may inspect Buyer's stock of consignment items at the store premises during normal business hours upon twenty-four (24) hours' notice (or, where reasonable suspicion of an unreported sale exists, on no notice). Buyer will provide access to the case, surrounding storage, and any back-of-house location where consignment items may be held. JBD will provide Buyer with a monthly reconciliation statement showing JBD-system sales, reported Cash Sales, expected on-hand consignment inventory, and reimbursements paid. Discrepancies will be settled within fifteen (15) days.</p>
 
-<h4>7. Provenance, Brand Standards & Display</h4>
-<p>All JBD glass pieces are provenance-verified through the JBD Glass app. Buyer will install the display per JBD-supplied placement guidance, will not modify, refinish, or relabel any JBD-branded item, and will refer customers to the provenance verification flow on request. Display imagery may not be used in Buyer's third-party advertising without JBD consent.</p>
+<h4>7. Wholesale Invoice — Deposit & Payment</h4>
+<p>The wholesale invoice covers Wholesale Items only. A non-refundable deposit equal to twenty-five percent (25%) of the wholesale invoice is due within seven (7) business days of signature, payable by ACH or wire. The remaining 75% is due no later than fourteen (14) days before the scheduled ship date. Allocation is not finalized until the deposit clears.</p>
 
-<h4>8. License Verification</h4>
-<p>Buyer represents that its NY Office of Cannabis Management (OCM) license is current and in good standing. Buyer will provide proof of license on request prior to shipment. JBD may cancel the allocation with full deposit refund if license cannot be verified.</p>
+<h4>8. Ship & Install Window</h4>
+<p>JBD will ship and install the allocation between <strong>August 1, 2026</strong> and <strong>August 15, 2026</strong>. JBD ops will coordinate the install date with Buyer's contact on file. Risk of loss for Wholesale Items passes to Buyer at delivery. Risk of loss for Consignment Items remains with JBD, except that Buyer is responsible for ordinary care, theft prevention, and reasonable storage conditions.</p>
 
-<h4>9. Limited Allocation</h4>
+<h4>9. Damage, Loss & Substitution</h4>
+<p>Buyer will inspect all items within seventy-two (72) hours of delivery and notify JBD in writing of damage, defect, or shortage. JBD will replace or credit damaged or defective Wholesale Items at its option. For Consignment Items, Buyer is liable for damage or loss attributable to Buyer's gross negligence, willful misconduct, theft from on-premises storage, or failure to follow JBD-supplied handling guidance, valued at JBD's wholesale cost (not MSRP). JBD may substitute SKUs of comparable value if a specific item becomes unavailable.</p>
+
+<h4>10. Provenance, Brand Standards & QR Placement</h4>
+<p>All JBD glass pieces are provenance-verified through the JBD Glass app. Buyer will install the display per JBD-supplied placement guidance, will keep the QR code prominently visible inside the case at all times, and will not modify, refinish, relabel, or obscure any JBD-branded item. Buyer will refer customers to the provenance and QR verification flow on request. Display imagery may not be used in Buyer's third-party advertising without JBD consent.</p>
+
+<h4>11. End of Program — Return of Consignment Items</h4>
+<p>At the end of the program, or upon termination by either party for any reason, JBD will retrieve all unsold Consignment Items at JBD's cost and on a schedule coordinated with Buyer. Buyer will hold unsold Consignment Items in saleable condition pending pickup and will not transfer them to any third party.</p>
+
+<h4>12. License Verification</h4>
+<p>Buyer represents that its NY OCM license is current and in good standing. Buyer will provide proof of license on request prior to shipment. JBD may cancel the allocation with full deposit refund if license cannot be verified.</p>
+
+<h4>13. Limited Allocation; JBD Discretion</h4>
 <p>This program is limited to ten (10) flagship stores. Allocations are filled on a first-signed-and-deposited basis. JBD reserves the right in its sole discretion to refuse any allocation, with full deposit refund in the event of refusal.</p>
 
-<h4>10. Marketing & Listing</h4>
+<h4>14. Marketing & Listing</h4>
 <p>JBD may list Buyer's store on drop1.cannacrypted.com and reference Buyer in launch announcements, social posts, and press materials. Buyer grants JBD a limited license to use Buyer's store name, city, and storefront imagery for this purpose. Either party may revoke this listing on thirty (30) days' written notice.</p>
 
-<h4>11. Governing Law</h4>
-<p>This agreement is governed by the laws of the State of New York. Disputes will be resolved by binding arbitration in New York County. Buyer and JBD waive jury trial.</p>
+<h4>15. Governing Law; Disputes</h4>
+<p>This agreement is governed by the laws of the State of New York. Disputes will be resolved by binding arbitration in New York County. Buyer and JBD waive jury trial. The prevailing party in any dispute over a Cash Sale settlement obligation under Section 5 is entitled to recover reasonable attorneys' fees and costs.</p>
 
-<h4>12. Acknowledgement</h4>
-<p>By checking the boxes below and signing the next page, Buyer acknowledges they have read, understood, and agree to be bound by these terms.</p>`;
+<h4>16. Acknowledgement</h4>
+<p>By checking the boxes below and signing the next page, Buyer acknowledges they have read, understood, and agree to be bound by these terms — including (a) the JBD QR Payment System as the required channel for consignment sales, (b) the 80%-to-JBD / 20%-to-Buyer settlement on any cash sale of a consignment item, (c) JBD's continuing ownership and right to retrieve consignment items on five business days' notice, and (d) JBD's right to inspect on-premises consignment inventory.</p>`;
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -865,14 +1033,14 @@ function renderTiers() {
       <div class="tier-name">${t.name}</div>
       <div class="tier-tagline">${t.tagline}</div>
       <div class="tier-price">${fmt$(t.price)}</div>
-      <div class="tier-price-sub">your invoice · ${fmt$(t.deposit)} deposit (25%)</div>
+      <div class="tier-price-sub">wholesale invoice · ${fmt$(t.deposit)} deposit (25%)</div>
       <div class="tier-stats">
         <div>
-          <div class="stat-l">Display Value (free)</div>
-          <div class="stat-v">${fmt$(t.totals.freeMsrp)}</div>
+          <div class="stat-l">Consignment Value</div>
+          <div class="stat-v">${fmt$(t.totals.consignmentMsrp)}</div>
         </div>
         <div>
-          <div class="stat-l">Sell-Through GP</div>
+          <div class="stat-l">Total Sell-Through GP</div>
           <div class="stat-v good">${fmt$(t.totals.retailerGp)}</div>
         </div>
       </div>
@@ -918,10 +1086,10 @@ function renderCompareGrid() {
       const present = TIERS.some(t => t.units[id]);
       if (!present) return;
       const priceCell = item.wholesale === 0 && item.msrp === 0
-        ? '<span style="color:var(--ink-mute);">—</span>'
-        : item.wholesale === 0
-          ? `<span class="item-name">${fmt$(item.msrp)} MSRP</span><span class="item-detail">$0 wholesale (display)</span>`
-          : `<span class="item-name">${fmt$(item.msrp)} MSRP</span><span class="item-detail">${fmt$(item.wholesale)} wholesale</span>`;
+        ? '<span style="color:var(--ink-mute);">included</span><span class="item-detail">consignment</span>'
+        : item.mode === 'consignment'
+          ? `<span class="item-name">${fmt$(item.msrp)} MSRP</span><span class="item-detail">consignment · 20% to retailer</span>`
+          : `<span class="item-name">${fmt$(item.msrp)} MSRP</span><span class="item-detail">${fmt$(item.wholesale)} wholesale (50% margin)</span>`;
       body.push(`
         <tr>
           <td class="item-cell">
@@ -940,20 +1108,24 @@ function renderCompareGrid() {
   // Totals
   body.push(`
     <tr class="totals-row">
-      <td class="item-cell" colspan="2">YOUR INVOICE (consignment, due net 7 / deposit 25%)</td>
+      <td class="item-cell" colspan="2">YOUR WHOLESALE INVOICE (resale items only)</td>
       ${TIERS.map(t => `<td class="units-cell">${fmt$(t.price)}</td>`).join('')}
     </tr>
     <tr class="totals-row">
-      <td class="item-cell" colspan="2">SELL-THROUGH AT FULL MSRP (incl. free display goods)</td>
-      ${TIERS.map(t => `<td class="units-cell">${fmt$(t.totals.msrp)}</td>`).join('')}
+      <td class="item-cell" colspan="2">CONSIGNMENT VALUE (case + glass + steeze + jars)</td>
+      ${TIERS.map(t => `<td class="units-cell">${fmt$(t.totals.consignmentMsrp)}</td>`).join('')}
     </tr>
     <tr class="totals-row">
-      <td class="item-cell" colspan="2">RETAILER GROSS PROFIT (sell-through − invoice)</td>
+      <td class="item-cell" colspan="2">RESALE GP (50% margin on items you stock)</td>
+      ${TIERS.map(t => `<td class="units-cell" style="color:var(--good)">${fmt$(t.totals.wholesaleGp)}</td>`).join('')}
+    </tr>
+    <tr class="totals-row">
+      <td class="item-cell" colspan="2">CONSIGNMENT GP UPSIDE (20% if display sells)</td>
+      ${TIERS.map(t => `<td class="units-cell" style="color:var(--good)">${fmt$(t.totals.consignmentGp)}</td>`).join('')}
+    </tr>
+    <tr class="totals-row">
+      <td class="item-cell" colspan="2">TOTAL POTENTIAL RETAILER GP</td>
       ${TIERS.map(t => `<td class="units-cell" style="color:var(--good)">${fmt$(t.totals.retailerGp)}</td>`).join('')}
-    </tr>
-    <tr class="totals-row">
-      <td class="item-cell" colspan="2">FREE DISPLAY GOODS VALUE (case + art glass + steeze + jars)</td>
-      ${TIERS.map(t => `<td class="units-cell">${fmt$(t.totals.freeMsrp)}</td>`).join('')}
     </tr>`);
 
   tbl.innerHTML = head + '<tbody>' + body.join('') + '</tbody>';
@@ -1090,6 +1262,15 @@ function goStep(n) {
   if (n === 3 && STATE.tier && STATE.store.storeName) renderAgreement();
   document.querySelectorAll('section.step').forEach(s => s.classList.remove('active'));
   document.getElementById('heroBlock').style.display = n === 1 ? '' : 'none';
+  const howBlock = document.getElementById('howBlock');
+  if (howBlock) howBlock.style.display = n === 1 ? '' : 'none';
+  // Reset projector button if leaving projector
+  const pb = document.getElementById('projectorBtn');
+  if (pb) {
+    pb.style.background = 'transparent'; pb.style.color = 'var(--gold)';
+    pb.textContent = '📊 Revenue Projector';
+  }
+  document.getElementById('stepIndicator').style.visibility = '';
   if (n === 'done') {
     document.getElementById('stepDone').classList.add('active');
     setSteps(4, true);
@@ -1098,6 +1279,161 @@ function goStep(n) {
     setSteps(n);
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// REVENUE PROJECTOR
+// ═══════════════════════════════════════════════════════════
+let _projectorBuilt = false;
+let _previousStep = 1;
+
+function toggleProjector() {
+  const isOpen = document.getElementById('stepProjector').classList.contains('active');
+  if (isOpen) {
+    goStep(_previousStep);
+    return;
+  }
+  // Remember where the user was so we can return after closing
+  const activeStep = document.querySelector('section.step.active');
+  if (activeStep && activeStep.id !== 'stepProjector') {
+    const m = activeStep.id.match(/^step(\d+)$/);
+    if (m) _previousStep = parseInt(m[1]);
+    else _previousStep = 1;
+  }
+  if (!_projectorBuilt) buildProjector();
+  document.querySelectorAll('section.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('howBlock').style.display = 'none';
+  document.getElementById('heroBlock').style.display = 'none';
+  document.getElementById('stepIndicator').style.visibility = 'hidden';
+  document.getElementById('stepProjector').classList.add('active');
+  const pb = document.getElementById('projectorBtn');
+  pb.style.background = 'var(--gold)'; pb.style.color = '#0a0a0a';
+  pb.textContent = '× Close Projector';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function _projectorItems() {
+  const resale = [], consignment = [];
+  Object.entries(CATALOG).forEach(([cat, items]) => {
+    Object.entries(items).forEach(([id, item]) => {
+      if (!item.msrp) return;
+      const entry = { id, ...item, cat };
+      if (item.mode === 'wholesale') resale.push(entry);
+      else consignment.push(entry);
+    });
+  });
+  return { resale, consignment };
+}
+
+function _projSliderRow(item, defaultVal, maxVal) {
+  return `
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:3px">
+        <span style="color:var(--ink)">${item.name}</span>
+        <span class="mono" style="color:var(--gold);font-weight:600" id="projVal_${item.id}">${defaultVal}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--ink-mute)">
+        <input type="range" id="projUnits_${item.id}" data-id="${item.id}" min="0" max="${maxVal}" value="${defaultVal}" oninput="recalcProjector()" style="flex:1">
+        <span class="mono" style="min-width:78px;text-align:right">${fmt$(item.msrp)} MSRP</span>
+      </div>
+    </div>`;
+}
+
+function buildProjector() {
+  _projectorBuilt = true;
+  loadProjTier();
+}
+
+function loadProjTier() {
+  const tierId = document.getElementById('projTierSel').value;
+  const tier = TIERS.find(t => t.id === tierId);
+  const { resale, consignment } = _projectorItems();
+  // Defaults: 1/3 of allocation per month (3-month sell-through). Max = 3× allocation.
+  const buildSliders = (items) => items.map(item => {
+    const allocation = tier.units[item.id] || 0;
+    const def = allocation > 0 ? Math.max(1, Math.round(allocation / 3)) : 0;
+    const max = Math.max(20, allocation * 3);
+    return _projSliderRow(item, def, max);
+  }).join('');
+  document.getElementById('projResaleSliders').innerHTML = buildSliders(resale);
+  document.getElementById('projConsignmentSliders').innerHTML = buildSliders(consignment);
+  recalcProjector();
+}
+
+function recalcProjector() {
+  const commission = parseFloat(document.getElementById('projCommission').value) / 100;
+  document.getElementById('projCommissionVal').textContent = (commission * 100).toFixed(0) + '%';
+  const { resale, consignment } = _projectorItems();
+  let resaleGp = 0, consignmentGp = 0, jbdRemit = 0, totalMsrp = 0;
+  const lines = [];
+
+  resale.forEach(item => {
+    const sl = document.getElementById('projUnits_' + item.id);
+    const u = sl ? parseInt(sl.value) || 0 : 0;
+    const valEl = document.getElementById('projVal_' + item.id);
+    if (valEl) valEl.textContent = u;
+    if (!u) return;
+    const lineMsrp = item.msrp * u;
+    const lineGp = (item.msrp - item.wholesale) * u;
+    resaleGp += lineGp; totalMsrp += lineMsrp;
+    lines.push({ name: item.name, units: u, msrp: lineMsrp, retailerGp: lineGp, jbd: 0, mode: 'wholesale' });
+  });
+  consignment.forEach(item => {
+    const sl = document.getElementById('projUnits_' + item.id);
+    const u = sl ? parseInt(sl.value) || 0 : 0;
+    const valEl = document.getElementById('projVal_' + item.id);
+    if (valEl) valEl.textContent = u;
+    if (!u) return;
+    const lineMsrp = item.msrp * u;
+    const lineGp = lineMsrp * commission;
+    const lineJbd = lineMsrp * (1 - commission);
+    consignmentGp += lineGp; jbdRemit += lineJbd; totalMsrp += lineMsrp;
+    lines.push({ name: item.name, units: u, msrp: lineMsrp, retailerGp: lineGp, jbd: lineJbd, mode: 'consignment' });
+  });
+
+  const totalRetailer = resaleGp + consignmentGp;
+  document.getElementById('projRetailerMonthly').textContent = fmt$(totalRetailer);
+  document.getElementById('projRetailerSplit').textContent =
+    `wholesale ${fmt$(resaleGp)} · consignment ${fmt$(consignmentGp)}`;
+  document.getElementById('projRetailerAnnual').textContent = fmt$(totalRetailer * 12);
+  document.getElementById('projMsrp').textContent = fmt$(totalMsrp);
+  document.getElementById('projJbdMonthly').textContent = fmt$(jbdRemit);
+
+  const tbl = document.getElementById('projBreakdown');
+  if (!lines.length) {
+    tbl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--ink-mute);font-size:13px">Drag the sliders on the left to project monthly volume.</div>';
+    return;
+  }
+  lines.sort((a, b) => b.retailerGp - a.retailerGp);
+  tbl.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+      <thead><tr style="background:var(--bg-3)">
+        <th style="text-align:left;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--line)">Item</th>
+        <th style="text-align:center;padding:10px 12px;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--line)">Units/mo</th>
+        <th style="text-align:right;padding:10px 12px;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--line)">MSRP $/mo</th>
+        <th style="text-align:right;padding:10px 12px;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--line)">Retailer $/mo</th>
+        <th style="text-align:right;padding:10px 16px;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mute);border-bottom:1px solid var(--line)">JBD $/mo</th>
+      </tr></thead>
+      <tbody>
+        ${lines.map(L => `
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px 16px"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${L.mode==='wholesale'?'var(--gold)':'#6b87ff'};margin-right:6px;vertical-align:middle"></span>${esc(L.name)}</td>
+            <td style="padding:8px 12px;text-align:center;font-family:JetBrains Mono,monospace">${L.units}</td>
+            <td style="padding:8px 12px;text-align:right;font-family:JetBrains Mono,monospace;color:var(--ink-mute)">${fmt$(L.msrp)}</td>
+            <td style="padding:8px 12px;text-align:right;font-family:JetBrains Mono,monospace;color:var(--good);font-weight:600">${fmt$(L.retailerGp)}</td>
+            <td style="padding:8px 16px;text-align:right;font-family:JetBrains Mono,monospace;color:var(--ink-mute)">${L.jbd ? fmt$(L.jbd) : '—'}</td>
+          </tr>`).join('')}
+      </tbody>
+      <tfoot>
+        <tr style="background:rgba(201,162,74,0.08);border-top:2px solid var(--gold)">
+          <td style="padding:14px 16px;font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);font-weight:600">Total</td>
+          <td></td>
+          <td style="padding:14px 12px;text-align:right;font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--ink)">${fmt$(totalMsrp)}</td>
+          <td style="padding:14px 12px;text-align:right;font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--good)">${fmt$(totalRetailer)}</td>
+          <td style="padding:14px 16px;text-align:right;font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--ink-mute)">${fmt$(jbdRemit)}</td>
+        </tr>
+      </tfoot>
+    </table>`;
 }
 
 function setSteps(n, done) {
